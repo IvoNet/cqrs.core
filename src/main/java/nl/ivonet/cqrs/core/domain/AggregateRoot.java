@@ -20,8 +20,8 @@ public abstract class AggregateRoot {
     @Setter
     private int version = -1;
 
-    public Iterator<BaseEvent> getUncommittedChanges() {
-        return changes.iterator();
+    public List<BaseEvent> getUncommittedChanges() {
+        return changes;
     }
 
     public void markChangesAsCommitted() {
