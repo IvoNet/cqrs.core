@@ -6,7 +6,6 @@ import nl.ivonet.cqrs.core.events.BaseEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +20,11 @@ public abstract class AggregateRoot {
     private int version = -1;
 
     public List<BaseEvent> getUncommittedChanges() {
-        return changes;
+        return this.changes;
     }
 
     public void markChangesAsCommitted() {
-        changes.clear();
+        this.changes.clear();
     }
 
     protected void applyChange(BaseEvent event, Boolean isNew) {
@@ -39,16 +38,16 @@ public abstract class AggregateRoot {
             log.log(Level.SEVERE, "Error while applying event " + event.getClass().getName(), e);
         } finally {
             if (isNew) {
-                changes.add(event);
+                this.changes.add(event);
             }
         }
     }
 
     public void raiseEvent(BaseEvent event) {
-        applyChange(event, true);
+        this.applyChange(event, true);
     }
 
     public void replayEvents(Iterable<BaseEvent> events) {
-        events.forEach(event -> applyChange(event, false));
+        events.forEach(event -> this.applyChange(event, false));
     }
 }
